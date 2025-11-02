@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温馨提示控制器</title>
+    <style>
+        body {
+            font-family: "微软雅黑", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+        }
+
+        .control-panel {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+
+        #generateBtn {
+            padding: 12px 24px;
+            font-size: 18px;
+            background-color: aliceblue;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #generateBtn:hover {
+            background-color: #e6f2ff;
+            transform: translateY(-2px);
+        }
+
+        .tip-box {
+            position: fixed;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-family: "微软雅黑", sans-serif;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: fadeIn 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <button id="generateBtn">点击生成温馨提示</button>
+    </div>
+
+    <script>
+        // 提示文字列表
+        const tips = [
+            '多喝水哦~要天天开心吖', '每天都要元气满满', '记得吃水果,保持好心情',
+            '照顾好自己,我想你了', '梦想成真', '期待下一次见面', '今天的风，也为你温柔',
+            '顺顺利利', '早点休息', '愿所有烦恼都消失', '别熬夜', '今天过得开心嘛',
+            '天冷了，多穿衣服', '日子常新，快乐常在', '平安顺遂，不止今日',
+            '小小日子，悠哉悠哉', '所求皆如愿，所行皆坦途', '慢慢走，沿途有好风景',
+            '平安喜乐，四季安康', '平凡日常里，藏着小确幸', '万事顺意，岁岁欢喜',
+            '每一天，都有新惊喜', '照顾好自己，就是最好的事', '前路漫漫，亦有灿灿',
+            '简单生活，快乐翻倍', '今日份美好，已为你送达', '日子慢慢来，好运会常在'
+        ];
+
+        // 背景颜色列表
+        const bgColors = [
+            'lightpink', 'lightgreen', 'lavender', 'skyblue', 'lightyellow',
+            'plum', 'coral', 'bisque', 'aquamarine', 'mistyrose', 'honeydew',
+            'lavenderblush', 'oldlace'
+        ];
+
+        // 生成温馨提示窗口
+        function showWarmTip() {
+            // 创建提示框元素
+            const tipBox = document.createElement('div');
+            tipBox.className = 'tip-box';
+            
+            // 随机选择提示文字和背景色
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            const randomBg = bgColors[Math.floor(Math.random() * bgColors.length)];
+            
+            // 设置内容和样式
+            tipBox.textContent = randomTip;
+            tipBox.style.backgroundColor = randomBg;
+            
+            // 计算随机位置（确保在屏幕内）
+            const boxWidth = 250;
+            const boxHeight = 60;
+            const maxX = window.innerWidth - boxWidth;
+            const maxY = window.innerHeight - boxHeight;
+            const x = Math.floor(Math.random() * maxX);
+            const y = Math.floor(Math.random() * maxY);
+            
+            tipBox.style.left = `${x}px`;
+            tipBox.style.top = `${y}px`;
+            tipBox.style.width = `${boxWidth}px`;
+            tipBox.style.height = `${boxHeight}px`;
+            
+            // 添加到页面
+            document.body.appendChild(tipBox);
+            
+            // 5秒后移除（和原代码保持一致的5秒）
+            setTimeout(() => {
+                tipBox.style.animation = 'fadeOut 0.3s';
+                setTimeout(() => {
+                    document.body.removeChild(tipBox);
+                }, 300);
+            }, 5000);
+        }
+
+        // 绑定按钮点击事件
+        document.getElementById('generateBtn').addEventListener('click', showWarmTip);
+    </script>
+</body>
+</html>
