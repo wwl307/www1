@@ -21,6 +21,8 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             background-color: white;
+            /* 新增：给控制面板设置定位，方便获取其区域 */
+            position: relative;
         }
 
         #generateBtn {
@@ -90,8 +92,16 @@
             'lavenderblush', 'oldlace'
         ];
 
-        // 生成温馨提示窗口
+        // 获取按钮所在区域的信息
+        const btn = document.getElementById('generateBtn');
+        const controlPanel = document.querySelector('.control-panel');
+        let btnRect = null;
+
+        // 生成温馨提示窗口，确保不覆盖按钮区域
         function showWarmTip() {
+            // 获取按钮区域的位置和大小
+            btnRect = controlPanel.getBoundingClientRect();
+            
             // 创建提示框元素
             const tipBox = document.createElement('div');
             tipBox.className = 'tip-box';
@@ -104,13 +114,23 @@
             tipBox.textContent = randomTip;
             tipBox.style.backgroundColor = randomBg;
             
-            // 计算随机位置（确保在屏幕内）
+            // 计算随机位置（确保在屏幕内且不覆盖按钮区域）
             const boxWidth = 250;
             const boxHeight = 60;
-            const maxX = window.innerWidth - boxWidth;
-            const maxY = window.innerHeight - boxHeight;
-            const x = Math.floor(Math.random() * maxX);
-            const y = Math.floor(Math.random() * maxY);
+            let maxX = window.innerWidth - boxWidth;
+            let maxY = window.innerHeight - boxHeight;
+            let x, y;
+
+            // 循环生成位置，直到不在按钮区域内
+            do {
+                x = Math.floor(Math.random() * maxX);
+                y = Math.floor(Math.random() * maxY);
+            } while (
+                x + boxWidth > btnRect.left && 
+                x < btnRect.right && 
+                y + boxHeight > btnRect.top && 
+                y < btnRect.bottom
+            );
             
             tipBox.style.left = `${x}px`;
             tipBox.style.top = `${y}px`;
@@ -120,7 +140,7 @@
             // 添加到页面
             document.body.appendChild(tipBox);
             
-            // 5秒后移除（和原代码保持一致的5秒）
+            // 5秒后移除
             setTimeout(() => {
                 tipBox.style.animation = 'fadeOut 0.3s';
                 setTimeout(() => {
